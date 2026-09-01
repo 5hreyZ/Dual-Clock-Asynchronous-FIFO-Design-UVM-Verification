@@ -105,6 +105,13 @@ view_waves:
 # -----------------------------------------------------------------------------
 # Clean
 # -----------------------------------------------------------------------------
+
+# -----------------------------------------------------------------------------
+# AMD Vivado Simulator (xsim) GUI Flow
+# -----------------------------------------------------------------------------
+run_vivado_gui:
+	vivado -mode gui -source sim_vivado.tcl
+
 clean:
 	rm -rf csrc simv* *.log *.key *.vpd *.vcd *.fsdb DVEfiles verdiLog work transcript \
 	       xcelium.d waves.shm cov_work *.vstf *.dat .simvision
