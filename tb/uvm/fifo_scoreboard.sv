@@ -37,6 +37,7 @@ class fifo_scoreboard #(parameter int DATA_WIDTH = 8, parameter int ADDR_WIDTH =
     realtime min_latency = 1000000.0;
     realtime max_latency = 0.0;
     realtime total_latency = 0.0;
+    real avg_lat;
 
     function new(string name = "fifo_scoreboard", uvm_component parent = null);
         super.new(name, parent);
@@ -60,6 +61,9 @@ class fifo_scoreboard #(parameter int DATA_WIDTH = 8, parameter int ADDR_WIDTH =
 
     // Read domain transaction processor
     virtual function void write_read(fifo_item #(DATA_WIDTH) item);
+        fifo_item #(DATA_WIDTH) exp_item;
+        realtime latency;
+
         if (item.rempty) begin
             num_underflow_reads++;
             `uvm_info("SCB_UNDERFLOW", $sformatf("Read attempt while EMPTY handled: %s", item.convert2string()), UVM_MEDIUM)
@@ -69,8 +73,8 @@ class fifo_scoreboard #(parameter int DATA_WIDTH = 8, parameter int ADDR_WIDTH =
                 num_mismatches++;
                 `uvm_error("SCB_EMPTY_POP", $sformatf("DUT produced read data 0x%0h but reference queue was EMPTY!", item.data))
             end else begin
-                fifo_item #(DATA_WIDTH) exp_item = expected_queue.pop_front();
-                realtime latency = item.sim_time - exp_item.sim_time;
+                exp_item = expected_queue.pop_front();
+                latency = item.sim_time - exp_item.sim_time;
 
                 if (latency < min_latency) min_latency = latency;
                 if (latency > max_latency) max_latency = latency;
@@ -99,27 +103,23 @@ class fifo_scoreboard #(parameter int DATA_WIDTH = 8, parameter int ADDR_WIDTH =
 
     function void report_phase(uvm_phase phase);
         super.report_phase(phase);
-        real avg_lat = (num_matches > 0) ? (total_latency / num_matches) : 0.0;
+        avg_lat = (num_matches > 0) ? (total_latency / num_matches) : 0.0;
 
-        `uvm_info("SCB_REPORT", "
-"             + "=========================================================================================
-"             + "                             ASYNC FIFO SCOREBOARD SUMMARY REPORT                        
-"             + "=========================================================================================
-"             + $sformatf(" Total Valid Writes Pushed   : %0d
-", num_valid_writes)             + $sformatf(" Total Valid Reads Checked   : %0d
-", num_valid_reads)             + $sformatf(" Overflow Write Attempts    : %0d
-", num_overflow_writes)             + $sformatf(" Underflow Read Attempts     : %0d
-", num_underflow_reads)             + $sformatf(" Successful Data Matches     : %0d
-", num_matches)             + $sformatf(" Data Mismatches / Errors    : %0d
-", num_mismatches)             + $sformatf(" Items Remaining In-Flight   : %0d
-", expected_queue.size())             + "-----------------------------------------------------------------------------------------
-"             + $sformatf(" Cross-Clock Min Latency     : %0.2f ns
-", (num_matches > 0) ? min_latency : 0.0)             + $sformatf(" Cross-Clock Max Latency     : %0.2f ns
-", max_latency)             + $sformatf(" Cross-Clock Avg Latency     : %0.2f ns
-", avg_lat)             + "=========================================================================================
-"             + ((num_mismatches == 0 && (num_valid_writes == num_valid_reads)) ?                "                       >>> TEST STATUS: ALL CHECKS PASSED <<<                    
-" :                "                       >>> TEST STATUS: FAILED CHECKS DETECTED <<<               
-")             + "=========================================================================================",             UVM_NONE)
+        `uvm_info("SCB_REPORT", $sformatf("\n=========================================================================================\n                             ASYNC FIFO SCOREBOARD SUMMARY REPORT                        \n=========================================================================================\n Total Valid Writes Pushed   : %0d\n Total Valid Reads Checked   : %0d\n Overflow Write Attempts     : %0d\n Underflow Read Attempts     : %0d\n Successful Data Matches     : %0d\n Data Mismatches / Errors    : %0d\n Items Remaining In-Flight   : %0d\n-----------------------------------------------------------------------------------------\n Cross-Clock Min Latency     : %0.2f ns\n Cross-Clock Max Latency     : %0.2f ns\n Cross-Clock Avg Latency     : %0.2f ns\n=========================================================================================\n%s\n=========================================================================================",
+            num_valid_writes,
+            num_valid_reads,
+            num_overflow_writes,
+            num_underflow_reads,
+            num_matches,
+            num_mismatches,
+            expected_queue.size(),
+            (num_matches > 0) ? min_latency : 0.0,
+            max_latency,
+            avg_lat,
+            ((num_mismatches == 0 && (num_valid_writes == num_valid_reads)) ?
+               "                       >>> TEST STATUS: ALL CHECKS PASSED <<<                    " :
+               "                       >>> TEST STATUS: FAILED CHECKS DETECTED <<<               ")),
+            UVM_NONE)
     endfunction
 
 endclass

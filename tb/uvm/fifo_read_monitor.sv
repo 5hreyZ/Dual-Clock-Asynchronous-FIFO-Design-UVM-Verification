@@ -6,7 +6,7 @@
 //=============================================================================
 
 `ifndef FIFO_READ_MONITOR_SV
-`define FIFO_READ_DRIVER_SV
+`define FIFO_READ_MONITOR_SV
 
 class fifo_read_monitor #(parameter int DATA_WIDTH = 8, parameter int ADDR_WIDTH = 4) extends uvm_monitor;
 
