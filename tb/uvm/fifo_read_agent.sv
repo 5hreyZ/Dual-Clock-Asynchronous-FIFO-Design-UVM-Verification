@@ -1,5 +1,3 @@
-`timescale 1ns / 1ps
-
 //=============================================================================
 // File: fifo_read_agent.sv
 // Description: UVM Agent for Read Clock Domain

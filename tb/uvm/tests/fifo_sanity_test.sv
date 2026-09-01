@@ -1,5 +1,3 @@
-`timescale 1ns / 1ps
-
 //=============================================================================
 // File: fifo_sanity_test.sv
 // Description: Basic sanity test performing sequential writes followed by reads

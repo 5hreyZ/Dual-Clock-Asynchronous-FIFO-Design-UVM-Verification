@@ -1,5 +1,3 @@
-`timescale 1ns / 1ps
-
 //=============================================================================
 // File: fifo_write_driver.sv
 // Description: UVM Driver for FIFO Write Clock Domain (wclk)

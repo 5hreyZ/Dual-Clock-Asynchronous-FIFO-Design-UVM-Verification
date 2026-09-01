@@ -1,5 +1,3 @@
-`timescale 1ns / 1ps
-
 //=============================================================================
 // File: fifo_burst_seq.sv
 // Description: Burst Sequence: writes burst of N items with 0 delay (filling FIFO),

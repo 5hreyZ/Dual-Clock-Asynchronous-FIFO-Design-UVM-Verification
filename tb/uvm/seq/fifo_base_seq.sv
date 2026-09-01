@@ -1,5 +1,3 @@
-`timescale 1ns / 1ps
-
 //=============================================================================
 // File: fifo_base_seq.sv
 // Description: Base UVM Sequence for FIFO verification

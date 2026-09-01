@@ -1,5 +1,3 @@
-`timescale 1ns / 1ps
-
 //=============================================================================
 // File: fifo_read_monitor.sv
 // Description: UVM Monitor for FIFO Read Domain (rclk)

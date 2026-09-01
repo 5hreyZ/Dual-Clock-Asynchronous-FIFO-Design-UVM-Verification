@@ -1,5 +1,3 @@
-`timescale 1ns / 1ps
-
 //=============================================================================
 // File: fifo_concurrent_test.sv
 // Description: Concurrent read & write test simulating simultaneous cross-domain traffic

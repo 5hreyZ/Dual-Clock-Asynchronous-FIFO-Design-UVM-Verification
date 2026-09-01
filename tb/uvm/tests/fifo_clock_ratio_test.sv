@@ -1,5 +1,3 @@
-`timescale 1ns / 1ps
-
 //=============================================================================
 // File: fifo_clock_ratio_test.sv
 // Description: Multi-clock frequency ratio test (Fast Write/Slow Read & Slow Write/Fast Read)

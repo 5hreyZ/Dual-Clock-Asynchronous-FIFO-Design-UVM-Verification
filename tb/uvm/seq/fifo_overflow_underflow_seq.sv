@@ -1,5 +1,3 @@
-`timescale 1ns / 1ps
-
 //=============================================================================
 // File: fifo_overflow_underflow_seq.sv
 // Description: Stress sequence deliberately attempting writes to a full FIFO

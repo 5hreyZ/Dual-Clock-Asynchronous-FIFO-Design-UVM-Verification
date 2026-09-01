@@ -1,5 +1,3 @@
-`timescale 1ns / 1ps
-
 //=============================================================================
 // File: fifo_item.sv
 // Description: UVM Sequence Item representing FIFO transactions (Write / Read)

@@ -1,5 +1,3 @@
-`timescale 1ns / 1ps
-
 //=============================================================================
 // File: fifo_env.sv
 // Description: UVM Verification Environment assembling Write Agent, Read Agent,

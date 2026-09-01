@@ -1,4 +1,6 @@
-`timescale 1ns / 1ps\n\n//=============================================================================
+`timescale 1ns / 1ps
+
+//=============================================================================
 // File: fifo_pkg.sv
 // Description: UVM Verification Package for Asynchronous FIFO
 //              Packages all sequence items, drivers, monitors, agents,

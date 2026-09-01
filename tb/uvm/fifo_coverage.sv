@@ -1,5 +1,3 @@
-`timescale 1ns / 1ps
-
 //=============================================================================
 // File: fifo_coverage.sv
 // Description: UVM Functional Coverage Model for Asynchronous FIFO

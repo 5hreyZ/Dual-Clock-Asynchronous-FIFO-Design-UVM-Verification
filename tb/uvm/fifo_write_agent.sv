@@ -1,5 +1,3 @@
-`timescale 1ns / 1ps
-
 //=============================================================================
 // File: fifo_write_agent.sv
 // Description: UVM Agent for Write Clock Domain

@@ -1,5 +1,3 @@
-`timescale 1ns / 1ps
-
 //=============================================================================
 // File: fifo_read_driver.sv
 // Description: UVM Driver for FIFO Read Clock Domain (rclk)

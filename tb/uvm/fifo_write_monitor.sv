@@ -1,5 +1,3 @@
-`timescale 1ns / 1ps
-
 //=============================================================================
 // File: fifo_write_monitor.sv
 // Description: UVM Monitor for FIFO Write Domain (wclk)

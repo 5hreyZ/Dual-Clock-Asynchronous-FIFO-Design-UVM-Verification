@@ -1,5 +1,3 @@
-`timescale 1ns / 1ps
-
 //=============================================================================
 // File: fifo_burst_test.sv
 // Description: Burst test verifying full depth write and complete drain across multiple cycles

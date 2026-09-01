@@ -1,5 +1,3 @@
-`timescale 1ns / 1ps
-
 //=============================================================================
 // File: fifo_scoreboard.sv
 // Description: UVM Scoreboard with Golden Queue Reference Model
