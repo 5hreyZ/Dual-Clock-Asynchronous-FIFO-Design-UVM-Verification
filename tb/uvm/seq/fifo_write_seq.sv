@@ -1,3 +1,5 @@
+`timescale 1ns / 1ps
+
 //=============================================================================
 // File: fifo_write_seq.sv
 // Description: UVM Sequence to generate configurable write transactions

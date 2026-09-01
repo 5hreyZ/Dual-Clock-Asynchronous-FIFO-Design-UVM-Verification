@@ -1,3 +1,5 @@
+`timescale 1ns / 1ps
+
 //=============================================================================
 // File: fifo_read_sequencer.sv
 // Description: UVM Sequencer for Read Clock Domain

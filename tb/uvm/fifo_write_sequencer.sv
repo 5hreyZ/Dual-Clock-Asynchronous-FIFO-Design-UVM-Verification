@@ -1,3 +1,5 @@
+`timescale 1ns / 1ps
+
 //=============================================================================
 // File: fifo_write_sequencer.sv
 // Description: UVM Sequencer for Write Clock Domain

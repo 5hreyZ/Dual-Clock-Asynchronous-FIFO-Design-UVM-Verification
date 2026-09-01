@@ -1,3 +1,5 @@
+`timescale 1ns / 1ps
+
 //=============================================================================
 // File: fifo_base_test.sv
 // Description: Base UVM Test creating environment and handling test lifecycles

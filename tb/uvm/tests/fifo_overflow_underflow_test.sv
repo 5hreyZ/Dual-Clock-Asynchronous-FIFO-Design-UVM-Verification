@@ -1,3 +1,5 @@
+`timescale 1ns / 1ps
+
 //=============================================================================
 // File: fifo_overflow_underflow_test.sv
 // Description: Corner-case test verifying overflow and underflow protection

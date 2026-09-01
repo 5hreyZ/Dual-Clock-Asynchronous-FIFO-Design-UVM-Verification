@@ -6,7 +6,7 @@ mkdir -p vivado_sim
 cd vivado_sim
 
 echo "== 1. Compiling SystemVerilog Design and Testbench =="
-xvlog -sv -L uvm --timescale 1ns/1ps -i ../../rtl -i ../../sva -i ../../tb -i ../../tb/uvm \
+xvlog --sv -L uvm --relax -i ../../rtl -i ../../sva -i ../../tb -i ../../tb/uvm \
     ../../rtl/sync_2ff.sv \
     ../../rtl/fifo_mem.sv \
     ../../rtl/wptr_full.sv \
@@ -18,7 +18,7 @@ xvlog -sv -L uvm --timescale 1ns/1ps -i ../../rtl -i ../../sva -i ../../tb -i ..
     ../../tb/uvm/fifo_pkg.sv \
     ../../tb/tb_top.sv
 
-echo "== 2. Elaborating Top Level Design with Default Timescale =="
+echo "== 2. Elaborating Top Level Design =="
 xelab -top tb_top -L uvm -timescale 1ns/1ps -override_timeunit -override_timeprecision -debug typical -s fifo_top_sim
 
 echo "== 3. Launching Vivado Waveform GUI =="

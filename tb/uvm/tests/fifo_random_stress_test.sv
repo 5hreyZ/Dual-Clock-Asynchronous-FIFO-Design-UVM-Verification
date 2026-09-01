@@ -1,3 +1,5 @@
+`timescale 1ns / 1ps
+
 //=============================================================================
 // File: fifo_random_stress_test.sv
 // Description: Full randomized stress test testing all data patterns and delays

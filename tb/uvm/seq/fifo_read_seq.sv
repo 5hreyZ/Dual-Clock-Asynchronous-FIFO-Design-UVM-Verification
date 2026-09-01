@@ -1,3 +1,5 @@
+`timescale 1ns / 1ps
+
 //=============================================================================
 // File: fifo_read_seq.sv
 // Description: UVM Sequence to generate configurable read transactions
