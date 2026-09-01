@@ -41,15 +41,15 @@ module fifo_sva #(
     // Assertion: Gray pointer must change by AT MOST 1 bit on any write clock cycle
     property p_gray_wptr_single_bit_change;
         @(posedge wclk) disable iff (!wrst_n)
-        $countones(wptr_gray ^ $past(wptr_gray)) <= 1;
+        $countones(wptr_gray ^ $past(wptr_gray, 1, 1'b1, @(posedge wclk))) <= 1;
     endproperty
     assert_gray_wptr_step: assert property (p_gray_wptr_single_bit_change)
-        else $error("[SVA ERROR] Write Gray pointer changed by more than 1 bit in a single cycle! %b -> %b", $past(wptr_gray), wptr_gray);
+        else $error("[SVA ERROR] Write Gray pointer changed by more than 1 bit in a single cycle! Current: %b", wptr_gray);
 
     // Assertion: Write pointer must not change when w_inc is 0 or when wfull is asserted
     property p_wptr_stable_when_idle_or_full;
         @(posedge wclk) disable iff (!wrst_n)
-        (!w_inc || wfull) |=> (wptr_gray == $past(wptr_gray));
+        (!w_inc || wfull) |=> (wptr_gray == $past(wptr_gray, 1, 1'b1, @(posedge wclk)));
     endproperty
     assert_wptr_stable: assert property (p_wptr_stable_when_idle_or_full)
         else $error("[SVA ERROR] Write pointer changed without valid write increment or when FIFO was full!");
@@ -69,15 +69,15 @@ module fifo_sva #(
     // Assertion: Gray pointer must change by AT MOST 1 bit on any read clock cycle
     property p_gray_rptr_single_bit_change;
         @(posedge rclk) disable iff (!rrst_n)
-        $countones(rptr_gray ^ $past(rptr_gray)) <= 1;
+        $countones(rptr_gray ^ $past(rptr_gray, 1, 1'b1, @(posedge rclk))) <= 1;
     endproperty
     assert_gray_rptr_step: assert property (p_gray_rptr_single_bit_change)
-        else $error("[SVA ERROR] Read Gray pointer changed by more than 1 bit in a single cycle! %b -> %b", $past(rptr_gray), rptr_gray);
+        else $error("[SVA ERROR] Read Gray pointer changed by more than 1 bit in a single cycle! Current: %b", rptr_gray);
 
     // Assertion: Read pointer must not change when r_inc is 0 or when rempty is asserted
     property p_rptr_stable_when_idle_or_empty;
         @(posedge rclk) disable iff (!rrst_n)
-        (!r_inc || rempty) |=> (rptr_gray == $past(rptr_gray));
+        (!r_inc || rempty) |=> (rptr_gray == $past(rptr_gray, 1, 1'b1, @(posedge rclk)));
     endproperty
     assert_rptr_stable: assert property (p_rptr_stable_when_idle_or_empty)
         else $error("[SVA ERROR] Read pointer changed without valid read increment or when FIFO was empty!");
