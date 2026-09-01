@@ -2,7 +2,7 @@
 # Direct Vivado Simulator (xsim) compilation and GUI launcher
 set -e
 
-TEST=${1:-fifo_random_stress_test}
+TEST=${1:-fifo_random_stress_test_wrapper}
 
 mkdir -p vivado_sim
 cd vivado_sim

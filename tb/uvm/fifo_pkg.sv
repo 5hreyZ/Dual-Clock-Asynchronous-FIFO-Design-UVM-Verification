@@ -57,6 +57,9 @@ package fifo_pkg;
     `include "tests/fifo_clock_ratio_test.sv"
     `include "tests/fifo_random_stress_test.sv"
 
+    // Non-parameterized wrappers for UVM factory lookup by name
+    `include "tests/fifo_test_wrappers.sv"
+
 endpackage : fifo_pkg
 
 `endif // FIFO_PKG_SV

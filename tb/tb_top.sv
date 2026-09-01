@@ -113,7 +113,7 @@ module tb_top;
 
         // Parse test name plusarg or default to random stress test
         if (!$value$plusargs("UVM_TESTNAME=%s", test_name)) begin
-            test_name = "fifo_random_stress_test";
+            test_name = "fifo_random_stress_test_wrapper";
         end
 
         // Execute UVM Testbench
