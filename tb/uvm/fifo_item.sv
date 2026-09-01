@@ -49,7 +49,7 @@ class fifo_item #(parameter int DATA_WIDTH = 8) extends uvm_sequence_item;
     }
 
     constraint c_pattern_default {
-        pattern_type == PAT_RANDOM;
+        soft pattern_type == PAT_RANDOM;
     }
 
     `uvm_object_param_utils_begin(fifo_item #(DATA_WIDTH))
