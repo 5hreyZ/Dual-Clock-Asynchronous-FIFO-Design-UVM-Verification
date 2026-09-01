@@ -34,9 +34,6 @@ module fifo_sva #(
     input logic [ADDR_WIDTH:0]   rptr_gray
 );
 
-    // Default clocking / disable for domain properties
-    default disable iff (!wrst_n || !rrst_n);
-
     //-------------------------------------------------------------------------
     // 1. SAFETY ASSERTIONS - Write Clock Domain
     //-------------------------------------------------------------------------
