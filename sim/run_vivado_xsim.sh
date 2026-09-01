@@ -2,6 +2,8 @@
 # Direct Vivado Simulator (xsim) compilation and GUI launcher
 set -e
 
+TEST=${1:-fifo_random_stress_test}
+
 mkdir -p vivado_sim
 cd vivado_sim
 
@@ -21,5 +23,5 @@ xvlog --sv -L uvm --relax -i ../../rtl -i ../../sva -i ../../tb -i ../../tb/uvm 
 echo "== 2. Elaborating Top Level Design =="
 xelab -top tb_top -L uvm -timescale 1ns/1ps -override_timeunit -override_timeprecision -debug typical -s fifo_top_sim
 
-echo "== 3. Launching Vivado Waveform GUI =="
-xsim fifo_top_sim -gui
+echo "== 3. Launching Vivado Waveform GUI with Test: $TEST =="
+xsim fifo_top_sim -gui -testplusarg UVM_TESTNAME=$TEST

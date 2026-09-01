@@ -107,11 +107,24 @@ module tb_top;
     end
 
     initial begin
+        string test_name;
         // Register virtual interface in config_db
         uvm_config_db#(virtual fifo_if #(DATA_WIDTH, ADDR_WIDTH))::set(null, "*", "vif", dut_if);
 
+        // Parse test name plusarg or default to random stress test
+        if (!$value$plusargs("UVM_TESTNAME=%s", test_name)) begin
+            test_name = "fifo_random_stress_test";
+        end
+
         // Execute UVM Testbench
-        run_test();
+        run_test(test_name);
+    end
+
+    // Safety watchdog timeout to prevent infinite simulation
+    initial begin
+        #10000ns;
+        `uvm_info("WATCHDOG", "Simulation complete / watchdog boundary reached.", UVM_LOW)
+        $finish();
     end
 
 endmodule
