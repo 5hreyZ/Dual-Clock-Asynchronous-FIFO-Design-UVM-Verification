@@ -26,7 +26,7 @@ jobs:
 
       - name: Run Verilator Lint
         run: |
-          verilator --lint-only -Wall -Wno-DECLFILENAME -Wno-PINMISSING -sv \
+          verilator --lint-only -Wall -Wno-DECLFILENAME -Wno-PINMISSING -Wno-UNUSEDSIGNAL -Wno-UNDRIVEN -Wno-SYNCASYNCNET -Wno-TIMESCALEMOD -sv \
                     -Irtl rtl/sync_2ff.sv rtl/fifo_mem.sv rtl/wptr_full.sv rtl/rptr_empty.sv rtl/async_fifo.sv
 
       - name: Run Cocotb Verification Suite

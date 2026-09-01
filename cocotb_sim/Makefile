@@ -1,6 +1,8 @@
-# Makefile for Cocotb Simulation
 SIM ?= icarus
 TOPLEVEL_LANG ?= verilog
+
+EXTRA_ARGS += -g2012
+COMPILE_ARGS += -g2012
 
 VERILOG_SOURCES += $(PWD)/../rtl/sync_2ff.sv
 VERILOG_SOURCES += $(PWD)/../rtl/fifo_mem.sv

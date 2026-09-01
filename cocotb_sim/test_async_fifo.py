@@ -187,4 +187,4 @@ async def test_fifo_random_concurrent_traffic(dut):
 
     summary = model.get_summary()
     dut._log.info(f"✓ Randomized stress test summary: {summary}")
-    assert summary["mismatches"] == 0, f"Detected {summary[mismatches]} mismatches"
+    assert summary["mismatches"] == 0, f"Detected {summary['mismatches']} mismatches"
