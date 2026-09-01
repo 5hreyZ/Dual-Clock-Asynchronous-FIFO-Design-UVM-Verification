@@ -1,0 +1,35 @@
+name: Async FIFO CDC & UVM CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  lint-and-verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+
+      - name: Install Verilog Simulation Tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y iverilog verilator
+          pip install cocotb pytest
+
+      - name: Run Verilator Lint
+        run: |
+          verilator --lint-only -Wall -Wno-DECLFILENAME -Wno-PINMISSING -sv \
+                    -Irtl rtl/sync_2ff.sv rtl/fifo_mem.sv rtl/wptr_full.sv rtl/rptr_empty.sv rtl/async_fifo.sv
+
+      - name: Run Cocotb Verification Suite
+        working-directory: cocotb_sim
+        run: |
+          make SIM=icarus
