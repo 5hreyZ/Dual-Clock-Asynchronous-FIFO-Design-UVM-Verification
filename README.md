@@ -13,7 +13,7 @@
 
 This repository contains an industry-standard, production-grade **Dual-Clock Asynchronous FIFO** RTL design with robust **Clock Domain Crossing (CDC)** protection, concurrent **SystemVerilog Assertions (SVA)**, and an end-to-end **UVM 1.2 Verification Environment** achieving **100% functional and assertion coverage** across cross-clock corner cases.
 
-> **Resume Highlight:**
+> **Resume Highlights:**
 > - **Dual-Clock Asynchronous FIFO Design & UVM Verification**
 > - *RTL Design, Clock Domain Crossing (CDC), SystemVerilog, UVM, SVA*
 > - Designed parameterized Dual-Clock Async FIFO using Gray-coded pointers and 2-FF synchronizers to mitigate metastability across independent read/write clock domains.
@@ -23,39 +23,15 @@ This repository contains an industry-standard, production-grade **Dual-Clock Asy
 
 ## 🏗️ RTL Architecture
 
-The RTL design implements Cliff Cummings\x27 proven asynchronous FIFO architecture with modern SystemVerilog enhancements, modular structure, and parameterized bit-widths.
+<p align="center">
+  <img src="docs/images/rtl_architecture.png" alt="Dual-Clock Async FIFO Architecture" width="850">
+</p>
 
-```
-                  +-------------------------------------------------------------+
-                  |                      async_fifo.sv                          |
-                  |                                                             |
-                  |     +--------------+                     +--------------+   |
-  wclk, wrst_n -->|---->|  wptr_full   |--- wptr_gray ------>|  sync_2ff    |---|---> (to rclk domain)
-  w_inc, wdata -->|---->|  (Wr Pointer |                     |  (w2r Sync)  |   |
-  wfull <---------|<----|   & Full)    |<-- rptr_gray_sync --|              |   |
-  almost_full <---|---\| +--------------+                     +--------------+   |
-                  |    \\      | (waddr, w_en)                      ^          |
-                  |     \\     v                                    |          |
-                  |    +--------------+                               |          |
-                  |    |   fifo_mem   |                               |          |
-                  |    |  (Dual-Port  |                               |          |
-                  |    |  SRAM Array) |                               |          |
-                  |    +--------------+                               |          |
-                  |            | (rdata)                              |          |
-                  |            v                                      |          |
-                  |     +--------------+                     +--------------+   |
-  rclk, rrst_n -->|---->|  rptr_empty  |--- rptr_gray ------>|  sync_2ff    |---|---> (to wclk domain)
-  r_inc --------->|---->|  (Rd Pointer |                     |  (r2w Sync)  |   |
-  rempty <--------|<----|   & Empty)   |<-- wptr_gray_sync --|              |   |
-  almost_empty <--|<----|              |                     +--------------+   |
-  rdata <---------|<----|              |                                        |
-                  |     +--------------+                                        |
-                  +-------------------------------------------------------------+
-```
+The RTL design implements Cliff Cummings\x27 proven asynchronous FIFO architecture with modern SystemVerilog enhancements, modular structure, and parameterized bit-widths.
 
 ### Key RTL Features:
 1. **CDC Safety by Construction**:
-   - Pointers converted to **Gray Code** prior to crossing domains ($d_H = 1$), eliminating multi-bit glitch hazards.
+   - Pointers converted to **Gray Code** prior to crossing domains ($d_H = 1$), eliminating multi-bit bus synchronization hazards.
    - **2-Stage Flip-Flop Synchronizers** with EDA synthesis attributes (`ASYNC_REG = "TRUE"`, `SYNCHRONIZER_IDENTIFICATION`) to ensure close physical placement and maximum MTBF.
    - Multi-bit data path stored in dual-port SRAM core; domain crossing only transfers single-bit-transition Gray pointers.
 2. **Pessimistic Flag Guarantees**:
@@ -63,6 +39,16 @@ The RTL design implements Cliff Cummings\x27 proven asynchronous FIFO architectu
    - Read domain perceives delayed write pointer $\implies$ `rempty` asserts conservatively (guaranteed **zero underflow**).
 3. **Threshold Indicators**:
    - Local Gray-to-Binary reconstruction enables programmable `almost_full` and `almost_empty` flags.
+
+---
+
+## 🔬 Simulation Waveform Trace
+
+<p align="center">
+  <img src="docs/images/waveform_trace.png" alt="Simulation Waveform Trace in Verdi" width="850">
+</p>
+
+*Waveform trace showing independent 100 MHz write domain (`wclk`) and 40 MHz read domain (`rclk`), Gray-coded pointer transitions across the `sync_2ff` CDC boundary, zero-data-loss burst transmission, and safe full/empty flag transitions.*
 
 ---
 
@@ -87,33 +73,9 @@ Concurrent SVA properties are encapsulated in `sva/fifo_sva.sv` and non-intrusiv
 
 ## 🧪 UVM 1.2 Verification Architecture
 
-```mermaid
-graph TD
-    TB_TOP["tb_top (Parameterized Dual Clock & Reset Harness)"] --> DUT["async_fifo (RTL DUT)"]
-    TB_TOP --> BIND["fifo_bind (Concurrent SVA Module)"]
-    TB_TOP --> VIF["fifo_if (Dual-Domain Clocking Blocks)"]
-    
-    TB_TOP --> TEST["UVM Test (e.g. fifo_random_stress_test)"]
-    TEST --> ENV["fifo_env"]
-    
-    ENV --> W_AGENT["fifo_write_agent (wclk domain)"]
-    W_AGENT --> W_SQRE["fifo_write_sequencer"]
-    W_AGENT --> W_DRV["fifo_write_driver"]
-    W_AGENT --> W_MON["fifo_write_monitor"]
-    
-    ENV --> R_AGENT["fifo_read_agent (rclk domain)"]
-    R_AGENT --> R_SQRE["fifo_read_sequencer"]
-    R_AGENT --> R_DRV["fifo_read_driver"]
-    R_AGENT --> R_MON["fifo_read_monitor"]
-    
-    ENV --> SCB["fifo_scoreboard (Golden Queue Reference Model)"]
-    ENV --> COV["fifo_coverage (Functional Coverage Model)"]
-    
-    W_MON -->|TLM Write Item| SCB
-    W_MON -->|TLM Write Item| COV
-    R_MON -->|TLM Read Item| SCB
-    R_MON -->|TLM Read Item| COV
-```
+<p align="center">
+  <img src="docs/images/uvm_architecture.png" alt="UVM 1.2 Testbench Architecture" width="850">
+</p>
 
 ### Verification Highlights:
 - **Dual-Domain Clocking Blocks**: Zero race condition testbench driving/sampling across independent write and read frequencies.
@@ -126,7 +88,11 @@ graph TD
 
 ---
 
-## 📊 Test Suite & Verification Results
+## 📊 Functional Coverage & Verification Results
+
+<p align="center">
+  <img src="docs/images/coverage_dashboard.png" alt="Functional Coverage Dashboard" width="850">
+</p>
 
 ```
 =========================================================================================
@@ -190,6 +156,21 @@ cd cocotb_sim
 make SIM=icarus
 ```
 
+### Running RTL Synthesis & CDC Checks
+Navigate to `syn/`:
+```bash
+cd syn
+
+# AMD Vivado Out-of-Context Synthesis & report_cdc
+make vivado
+
+# Synopsys Design Compiler Synthesis
+make dc
+
+# Open-source Yosys Synthesis
+make yosys
+```
+
 ---
 
 ## 📁 Repository Structure
@@ -224,6 +205,12 @@ async_fifo_uvm/
 │       ├── fifo_env.sv         # Top verification environment
 │       ├── seq/                # UVM sequence library
 │       └── tests/              # UVM test suite (Sanity, Burst, Concurrent, Stress, etc.)
+├── syn/
+│   ├── Makefile                # Synthesis targets (Vivado, Design Compiler, Yosys)
+│   ├── fifo_cdc.xdc            # SDC / XDC Timing & CDC constraints
+│   ├── synth_vivado.tcl        # Vivado batch non-project synthesis & report_cdc
+│   ├── synth_dc.tcl            # Synopsys DC compile_ultra script
+│   └── synth_yosys.tcl         # Yosys open-source synthesis script
 ├── sim/
 │   ├── Makefile                # Simulator build targets (VCS, Questa, Xcelium)
 │   ├── filelist_rtl.f          # RTL compilation list
@@ -233,6 +220,7 @@ async_fifo_uvm/
 │   ├── test_async_fifo.py
 │   └── model_fifo.py
 ├── docs/
+│   ├── images/                 # Architecture, Waveform & Coverage Screenshots
 │   ├── cdc_analysis.md         # CDC & Metastability detailed analysis
 │   ├── coverage_plan.md        # Functional & Code Coverage specification
 │   ├── uvm_architecture.md     # Testbench architecture and sequence flows
