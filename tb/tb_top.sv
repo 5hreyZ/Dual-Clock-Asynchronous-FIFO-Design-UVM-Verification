@@ -122,9 +122,8 @@ module tb_top;
 
     // Safety watchdog timeout to prevent infinite simulation
     initial begin
-        #10000ns;
-        `uvm_info("WATCHDOG", "Simulation complete / watchdog boundary reached.", UVM_LOW)
-        $finish();
+        #100000ns;
+        `uvm_fatal("WATCHDOG", "Simulation hit 100us safety limit without completing!")
     end
 
 endmodule
