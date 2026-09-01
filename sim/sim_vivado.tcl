@@ -1,10 +1,12 @@
-# Vivado Simulation & Waveform Generation Script
-# Run with: vivado -mode gui -source sim_vivado.tcl
+#=============================================================================
+# File: sim_vivado.tcl
+# Description: Vivado Simulation & Waveform Generation Script
+#=============================================================================
 
-# 1. Create project in sim directory
+# 1. Create in-memory simulation project
 create_project -force fifo_sim ./vivado_sim -part xc7a35tcsg324-1
 
-# 2. Add RTL & SVA Source Files
+# 2. Add Synthesizable RTL & SVA Source Files
 add_files -fileset sources_1 [list \
     ../rtl/sync_2ff.sv \
     ../rtl/fifo_mem.sv \
@@ -26,15 +28,17 @@ add_files -fileset sim_1 [list \
 set_property include_dirs [list ../rtl ../sva ../tb ../tb/uvm] [get_filesets sources_1]
 set_property include_dirs [list ../rtl ../sva ../tb ../tb/uvm] [get_filesets sim_1]
 
-# 5. Enable UVM in Vivado Simulator
-set_property xsim.elaborate.xelab.more_options "-L uvm" [get_filesets sim_1]
+# 5. Set Top Module
 set_property top tb_top [get_filesets sim_1]
 set_property top_lib xil_defaultlib [get_filesets sim_1]
 
-# 6. Launch Simulation
+# 6. Pass -L uvm to xelab using the "--" end-of-options flag so -L is not parsed as a Vivado switch
+set_property -- xsim.elaborate.xelab.more_options {-L uvm} [get_filesets sim_1]
+
+# 7. Launch Simulation GUI
 launch_simulation
 
-# Add signals to waveform window
+# 8. Add Key Signals to Wave Window
 add_wave /tb_top/wclk
 add_wave /tb_top/dut_if/wrst_n
 add_wave /tb_top/dut_if/w_inc
@@ -53,5 +57,5 @@ add_wave /tb_top/dut_if/almost_empty
 add_wave /tb_top/u_dut/rptr_gray
 add_wave /tb_top/u_dut/wptr_gray_sync
 
-# Run simulation
+# 9. Run for 2000ns
 run 2000ns
